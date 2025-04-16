@@ -23,18 +23,18 @@ func NewSinglyLinkedList() *SinglyLinkedList {
 	return &SinglyLinkedList{head: nil, tail: nil}
 }
 
-func IsEmpty(list *SinglyLinkedList) bool {
+func (list *SinglyLinkedList) IsEmpty() bool {
 	return list.head == nil
 }
 
-func ClearList(list *SinglyLinkedList) {
+func (list *SinglyLinkedList) ClearList() {
 	list.head = nil
 	list.tail = nil
 }
 
-func AddNode(list *SinglyLinkedList, info int) {
+func (list *SinglyLinkedList) AddNode(info int) {
 	newNode := NewNode(info)
-	if IsEmpty(list) {
+	if list.IsEmpty() {
 		list.tail = newNode
 		list.head = newNode
 		return
@@ -43,8 +43,8 @@ func AddNode(list *SinglyLinkedList, info int) {
 	list.tail = newNode
 }
 
-func ContainsNode(list *SinglyLinkedList, info int) bool {
-	if IsEmpty(list) {
+func (list *SinglyLinkedList) ContainsNode(info int) bool {
+	if list.IsEmpty() {
 		return false
 	}
 	current := list.head
@@ -57,12 +57,12 @@ func ContainsNode(list *SinglyLinkedList, info int) bool {
 	return false
 }
 
-func DeleteLast(list *SinglyLinkedList) {
-	if IsEmpty(list) {
+func (list *SinglyLinkedList) DeleteLast() {
+	if list.IsEmpty() {
 		return
 	}
 	if list.head == list.tail {
-		ClearList(list)
+		list.ClearList()
 		return
 	}
 	current := list.head
@@ -76,8 +76,8 @@ func DeleteLast(list *SinglyLinkedList) {
 	}
 }
 
-func TraverseAndPrint(list *SinglyLinkedList) {
-	if IsEmpty(list) {
+func (list *SinglyLinkedList) TraverseAndPrint() {
+	if list.IsEmpty() {
 		fmt.Println("No items found")
 		return
 	}
@@ -90,13 +90,13 @@ func TraverseAndPrint(list *SinglyLinkedList) {
 
 func main() {
 	var myList = NewSinglyLinkedList()
-	AddNode(myList, 2)
-	AddNode(myList, 5)
-	AddNode(myList, 10)
-	AddNode(myList, 6)
-	TraverseAndPrint(myList)
+	myList.AddNode(2)
+	myList.AddNode(5)
+	myList.AddNode(10)
+	myList.AddNode(6)
+	myList.TraverseAndPrint()
 	fmt.Println("Checking if list contains 6...")
-	fmt.Println(ContainsNode(myList, 6))
-	DeleteLast(myList)
-	TraverseAndPrint(myList)
+	fmt.Println(myList.ContainsNode(6))
+	myList.DeleteLast()
+	myList.TraverseAndPrint()
 }
