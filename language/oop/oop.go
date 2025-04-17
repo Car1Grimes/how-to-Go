@@ -7,31 +7,32 @@ import (
 	"strings"
 )
 
-type Animal struct {
-	food       string
-	locomotion string
-	noise      string
+type Animal interface {
+	Eat()
+	Move()
+	Speak()
 }
 
-func (a Animal) Eat() {
-	fmt.Println(a.food)
-}
+type Cow struct{}
 
-func (a Animal) Move() {
-	fmt.Println(a.locomotion)
-}
+func (c Cow) Eat()   { fmt.Println("grass") }
+func (c Cow) Move()  { fmt.Println("walk") }
+func (c Cow) Speak() { fmt.Println("moo") }
 
-func (a Animal) Speak() {
-	fmt.Println(a.noise)
-}
+type Bird struct{}
+
+func (b Bird) Eat()   { fmt.Println("worms") }
+func (b Bird) Move()  { fmt.Println("fly") }
+func (b Bird) Speak() { fmt.Println("peep") }
+
+type Snake struct{}
+
+func (s Snake) Eat()   { fmt.Println("mice") }
+func (s Snake) Move()  { fmt.Println("slither") }
+func (s Snake) Speak() { fmt.Println("hsss") }
 
 func main() {
-	animals := map[string]Animal{
-		"cow":   {"grass", "walk", "moo"},
-		"bird":  {"worms", "fly", "peep"},
-		"snake": {"mice", "slither", "hsss"},
-	}
-
+	animals := make(map[string]Animal)
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -39,33 +40,49 @@ func main() {
 		if !scanner.Scan() {
 			break
 		}
-		input := strings.ToLower(scanner.Text())
-		parts := strings.Fields(input)
-
-		if len(parts) != 2 {
-			fmt.Println("Please enter exactly two words: <animal> <action>")
+		input := strings.Fields(scanner.Text())
+		if len(input) != 3 {
+			fmt.Println("Invalid input. Please enter 3 words.")
 			continue
 		}
 
-		animalName := parts[0]
-		action := parts[1]
+		command, name, arg := input[0], input[1], input[2]
 
-		animal, exists := animals[animalName]
-		if !exists {
-			fmt.Println("Unknown animal:", animalName)
-			continue
-		}
+		switch command {
+		case "newanimal":
+			switch arg {
+			case "cow":
+				animals[name] = Cow{}
+			case "bird":
+				animals[name] = Bird{}
+			case "snake":
+				animals[name] = Snake{}
+			default:
+				fmt.Println("Unknown animal type.")
+				continue
+			}
+			fmt.Println("Created it!")
 
-		switch action {
-		case "eat":
-			animal.Eat()
-		case "move":
-			animal.Move()
-		case "speak":
-			animal.Speak()
+		case "query":
+			animal, ok := animals[name]
+			if !ok {
+				fmt.Println("Animal not found.")
+				continue
+			}
+
+			switch arg {
+			case "eat":
+				animal.Eat()
+			case "move":
+				animal.Move()
+			case "speak":
+				animal.Speak()
+			default:
+				fmt.Println("Unknown query type.")
+			}
+
 		default:
-			fmt.Println("Unknown action:", action)
+			fmt.Println("Unknown command.")
 		}
 	}
 }
-
