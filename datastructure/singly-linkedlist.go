@@ -1,22 +1,22 @@
 // vim: set ts=2 sw=2 expandtab:
-package main
+package datastructure
 
 import "fmt"
 
-type Node struct {
+type ListNode struct {
 	info int
-	next *Node
+	next *ListNode
 }
 
-func NewNode(info int) *Node {
-	return &Node{
+func NewListNode(info int) *ListNode {
+	return &ListNode{
 		info: info,
 		next: nil}
 }
 
 type SinglyLinkedList struct {
-	head *Node
-	tail *Node
+	head *ListNode
+	tail *ListNode
 }
 
 func NewSinglyLinkedList() *SinglyLinkedList {
@@ -33,7 +33,7 @@ func (list *SinglyLinkedList) ClearList() {
 }
 
 func (list *SinglyLinkedList) AddNode(info int) {
-	newNode := NewNode(info)
+	newNode := NewListNode(info)
 	if list.IsEmpty() {
 		list.tail = newNode
 		list.head = newNode
@@ -86,17 +86,4 @@ func (list *SinglyLinkedList) TraverseAndPrint() {
 		fmt.Printf("%d ", current.info)
 		current = current.next
 	}
-}
-
-func main() {
-	var myList = NewSinglyLinkedList()
-	myList.AddNode(2)
-	myList.AddNode(5)
-	myList.AddNode(10)
-	myList.AddNode(6)
-	myList.TraverseAndPrint()
-	fmt.Println("Checking if list contains 6...")
-	fmt.Println(myList.ContainsNode(6))
-	myList.DeleteLast()
-	myList.TraverseAndPrint()
 }
