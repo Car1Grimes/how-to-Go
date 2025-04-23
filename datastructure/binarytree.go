@@ -1,31 +1,55 @@
 package datastructure
 
+import "fmt"
+
 type TreeNode struct {
-	info      int
-	leftNode  *TreeNode
-	rightNode *TreeNode
+	Info      int
+	LeftNode  *TreeNode
+	RightNode *TreeNode
 }
 
 func NewTreeNode(info int) *TreeNode {
-	return &TreeNode{info: info, leftNode: nil, rightNode: nil}
+	return &TreeNode{Info: info, LeftNode: nil, RightNode: nil}
 }
 
 type BinaryTree struct {
-	root *TreeNode
+	Root *TreeNode
 }
 
 func NewBinaryTree() *BinaryTree {
-	return &BinaryTree{root: nil}
+	return &BinaryTree{Root: nil}
 }
 
 func (tree *BinaryTree) IsEmpty() bool {
-	return tree.root == nil
+	return tree.Root == nil
 }
 
-func (tree *BinaryTree) AddNode(node TreeNode, info int) {
-	if tree.IsEmpty() {
-		tree.root = NewTreeNode(info)
+func addNode(root *TreeNode, info int) *TreeNode {
+	if root == nil {
+		return NewTreeNode(info)
+	}
+	if root.Info > info {
+		root.LeftNode = addNode(root.LeftNode, info)
+	}
+	if root.Info < info {
+		root.RightNode = addNode(root.RightNode, info)
+	}
+	return root
+}
+
+func (tree *BinaryTree) AddNode(info int) {
+	tree.Root = addNode(tree.Root, info)
+}
+
+func visitNode(node *TreeNode) {
+	fmt.Print(node.Info, " ")
+}
+
+func PreOrder(root *TreeNode) {
+	if root == nil {
 		return
 	}
-
+	visitNode(root)
+	PreOrder(root.LeftNode)
+	PreOrder(root.RightNode)
 }
